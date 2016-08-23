@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UnityStandardAssets._2D
 {
-    public class PlatformerCharacter2D : MonoBehaviour
+    public class PlatformerCharacter2D : MonoBehaviour, Rotary.IOrientationChangedSubscriber
     {
         [SerializeField] private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis.
         [SerializeField] private float m_JumpForce = 400f;                  // Amount of force added when the player jumps.
@@ -28,7 +28,16 @@ namespace UnityStandardAssets._2D
             m_Anim = GetComponent<Animator>();
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
         }
+           
+        private void Start()
+        {
+            Rotary.OrientationController.Instance().Subscribe(this);
+        }
 
+        private void OnDestroy()
+        {
+            Rotary.OrientationController.Instance().UnSubscribe(this);
+        }
 
         private void FixedUpdate()
         {
@@ -109,6 +118,12 @@ namespace UnityStandardAssets._2D
             Vector3 theScale = transform.localScale;
             theScale.x *= -1;
             transform.localScale = theScale;
+        }
+
+        // IOrientationChangedSubscriber
+        public void OnOrientationChanged(Vector2 newUp, Vector2 newRight)
+        {
+            Debug.Log("OnOrientationChanged [newUp: " + newUp + ", newRight: " + newRight + "]");
         }
     }
 }

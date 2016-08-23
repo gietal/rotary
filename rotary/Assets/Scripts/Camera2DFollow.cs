@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UnityStandardAssets._2D
 {
-    public class Camera2DFollow : MonoBehaviour
+    public class Camera2DFollow : MonoBehaviour, Rotary.IOrientationChangedSubscriber
     {
         public Transform target;
         public float damping = 1;
@@ -22,8 +22,15 @@ namespace UnityStandardAssets._2D
             m_LastTargetPosition = target.position;
             m_OffsetZ = (transform.position - target.position).z;
             transform.parent = null;
+
+            // subscribe to event
+            Rotary.OrientationController.Instance().Subscribe(this);
         }
 
+        private void OnDestroy()
+        {
+            Rotary.OrientationController.Instance().UnSubscribe(this);
+        }
 
         // Update is called once per frame
         private void Update()
@@ -48,6 +55,11 @@ namespace UnityStandardAssets._2D
             transform.position = newPos;
 
             m_LastTargetPosition = target.position;
+        }
+
+        public void OnOrientationChanged(Vector2 newUp, Vector2 newRight)
+        {
+            Debug.Log("OnOrientationChanged [newUp: " + newUp + ", newRight: " + newRight + "]");
         }
     }
 }
