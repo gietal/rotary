@@ -23,21 +23,25 @@ namespace Rotary
             gravityForce = Physics2D.gravity.magnitude;
         }
 
+        /*
+         * rotation axis is z+ which is forward, so to rotate right
+         * we actually have to do negative angle
+        */
         public void RotateRight()
         {
-            Rotate(90);
+            Rotate(-90);
         }
 
         public void RotateLeft()
         {
-            Rotate(-90);
+            Rotate(90);
         }
 
         void Rotate(int angle)
         {
             // change camera here since it will be cheaper than in the camera
-            var q = Quaternion.AngleAxis(angle, Vector3.forward);
-            Camera.main.transform.rotation *= q;
+            //var q = Quaternion.AngleAxis(angle, Vector3.forward);
+            //Camera.main.transform.rotation *= q;
 
             // get the new values
             Vector2 newUp = Camera.main.transform.up;
@@ -52,7 +56,7 @@ namespace Rotary
             subscribers.ForEach(
                 (subscriber) =>
                 {
-                    subscriber.OnOrientationChanged(newUp, newRight);
+                    subscriber.OnOrientationChanged(newUp, newRight, (float)angle);
                 }
             );
         }

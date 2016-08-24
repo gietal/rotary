@@ -16,6 +16,10 @@ namespace UnityStandardAssets._2D
         private Vector3 m_CurrentVelocity;
         private Vector3 m_LookAheadPos;
 
+        private void Awake()
+        {
+        }
+
         // Use this for initialization
         private void Start()
         {
@@ -57,7 +61,7 @@ namespace UnityStandardAssets._2D
             m_LastTargetPosition = target.position;
         }
 
-        public void OnOrientationChanged(Vector2 newUp, Vector2 newRight)
+        public void OnOrientationChanged(Vector2 newUp, Vector2 newRight, float rotationAngle)
         {
             Debug.Log("OnOrientationChanged [newUp: " + newUp + ", newRight: " + newRight + "]");
         }
