@@ -9,10 +9,12 @@ namespace Rotary
 
         public override void OnSwitchActivated(GameObject sender)
         {
+            OpenGate();
         }
 
         public override void OnSwitchDeactivated(GameObject sender)
         {
+            CloseGate();
         }
 
         // Gate Behaviours
