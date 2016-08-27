@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 namespace Rotary
 {
@@ -25,7 +26,7 @@ namespace Rotary
                 return;
             
             // only toggle if user pressed interact key
-            if (Input.GetKeyDown(KeyCode.F))
+            if (CrossPlatformInputManager.GetButtonDown("Interact"))
             {
                 switchBehaviour.ToggleSwitch();
             }
