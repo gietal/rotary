@@ -7,7 +7,6 @@ namespace Rotary
     {
         private ISwitch switchBehaviour;
         private Dictionary<int, Collider2D> objectStayed;
-        private bool isTriggered = false;
 
         void Awake()
         {
@@ -20,7 +19,6 @@ namespace Rotary
         void Start()
         {
             objectStayed.Clear();
-            isTriggered = false;
         }
 
         void OnTriggerEnter2D(Collider2D other)

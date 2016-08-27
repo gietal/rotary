@@ -21,13 +21,16 @@ namespace Rotary
             OrientationController.Instance().UnSubscribe(this);
         }
             
-        public void OnOrientationChanged(Vector2 newUp, Vector2 newRight, float rotationAngle)
+        public void OnOrientationChanged(float newAngle)
         {
             // find player
             var player = GameObject.FindGameObjectWithTag("Player");
 
             // rotate around player's position around z axis
-            transform.RotateAround(player.transform.position, Vector3.forward, rotationAngle);
+
+            // rotate the difference of angle
+            var diff = newAngle - transform.rotation.eulerAngles.z ;
+            transform.RotateAround(player.transform.position, Vector3.forward, diff);
         }
 
         void ParentAllObjects()

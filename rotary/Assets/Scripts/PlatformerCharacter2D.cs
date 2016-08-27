@@ -121,9 +121,8 @@ namespace UnityStandardAssets._2D
         }
 
         // IOrientationChangedSubscriber
-        public void OnOrientationChanged(Vector2 newUp, Vector2 newRight, float rotationAngle)
+        public void OnOrientationChanged(float newAngle)
         {
-            Debug.Log("OnOrientationChanged [newUp: " + newUp + ", newRight: " + newRight + "]");
         }
     }
 }

@@ -61,9 +61,9 @@ namespace UnityStandardAssets._2D
             m_LastTargetPosition = target.position;
         }
 
-        public void OnOrientationChanged(Vector2 newUp, Vector2 newRight, float rotationAngle)
+        public void OnOrientationChanged(float newAngle)
         {
-            Debug.Log("OnOrientationChanged [newUp: " + newUp + ", newRight: " + newRight + "]");
+            Debug.Log("OnOrientationChanged [newAngle " + newAngle + "]");
         }
     }
 }

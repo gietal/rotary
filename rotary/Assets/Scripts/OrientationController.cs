@@ -5,22 +5,29 @@ using System.Collections.Generic;
 namespace Rotary
 {
     
-    public class OrientationController 
+    public class OrientationController : MonoBehaviour
     {
 
-        private static OrientationController instance = new OrientationController();
+        private static OrientationController instance;
 
         private List<IOrientationChangedSubscriber> subscribers = new List<IOrientationChangedSubscriber>();
-        private float gravityForce = 1;
+
+        [HideInInspector]
+        public bool isRotating { get; private set; }
+
+        [HideInInspector]
+        public float currentAngle { get; private set; }
 
         public static OrientationController Instance()
         {
             return instance;
         }
 
-        private OrientationController()
+        public OrientationController()
         {
-            gravityForce = Physics2D.gravity.magnitude;
+            isRotating = false;
+            currentAngle = 0;
+            instance = this;
         }
 
         /*
@@ -39,27 +46,77 @@ namespace Rotary
 
         void Rotate(int angle)
         {
-            // change camera here since it will be cheaper than in the camera
-            //var q = Quaternion.AngleAxis(angle, Vector3.forward);
-            //Camera.main.transform.rotation *= q;
+            if (isRotating)
+                return;
 
-            // get the new values
-            Vector2 newUp = Camera.main.transform.up;
-            Vector2 newRight = Camera.main.transform.right;
+            isRotating = true;
 
-            // change gravity
-            var newGravity = -newUp * gravityForce;
-            Debug.Log("new gravity: " + newGravity);
-            Physics2D.gravity = newGravity;
+            StartCoroutine(TweenAngleCoroutine(angle, 0.2f));
 
-            // notify subscribers, they will handle themselves
+        }
+
+        void NotifyOrientationChanged(float newAngle)
+        {
             subscribers.ForEach(
                 (subscriber) =>
                 {
-                    subscriber.OnOrientationChanged(newUp, newRight, (float)angle);
+                    subscriber.OnOrientationChanged((float)currentAngle);
                 }
             );
         }
+        
+        IEnumerator TweenAngleCoroutine(float angleChange, float targetSeconds)
+        {
+            Debug.Log("begin TweenAngle Coroutine ");
+            // how many times to change angle per second
+            const int stepsPerSecond = 60;
+
+            // how much time to wait between angle change
+            const float waitPerStep = 1.0f / (float)stepsPerSecond;
+
+            // how many times to step
+            // will be bad with odd targetSeconds
+            int stepCount = (int)(stepsPerSecond * targetSeconds);
+
+
+            float anglePerSecond = (float)angleChange / targetSeconds;
+
+            float anglePerStep = Time.fixedDeltaTime * anglePerSecond;
+            float anglePerStepAbs = Mathf.Abs(anglePerStep);
+
+            while(Mathf.Abs(angleChange) >= float.Epsilon)
+            {
+                // if the remaining angle to 
+                if (Mathf.Abs(angleChange) < anglePerStepAbs)
+                {
+                    // dont step the full angle
+                    anglePerStep = angleChange;
+                }
+
+                // update current angle
+                currentAngle += anglePerStep;
+
+                // reduce remaining angle to step
+                angleChange -= anglePerStep;
+
+                // clamp current angle to [0, 359]
+                if (currentAngle >= 360)
+                    currentAngle -= 360;
+                if (currentAngle < 0)
+                    currentAngle += 360;
+
+                // notify subscribers, they will handle themselves
+                NotifyOrientationChanged(currentAngle);
+
+                yield return new WaitForFixedUpdate();
+            }
+
+            isRotating = false;
+
+            Debug.Log("end TweenAngle Coroutine ");
+        }
+
+        // subscribing
 
         public void Subscribe(IOrientationChangedSubscriber subscriber)
         {

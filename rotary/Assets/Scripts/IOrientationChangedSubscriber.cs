@@ -4,9 +4,10 @@ using System.Collections;
 namespace Rotary
 {
     
-    public interface IOrientationChangedSubscriber  {
+    public interface IOrientationChangedSubscriber  
+    {
 
-        void OnOrientationChanged(Vector2 newUp, Vector2 newRight, float rotationAngle);
+        void OnOrientationChanged(float newAngle);
 
     }
 
