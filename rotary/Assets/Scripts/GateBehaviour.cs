@@ -21,6 +21,21 @@ namespace Rotary
 
         private float closedLength = 0;
 
+        public float currentGateScale 
+        {
+            get
+            {
+                return transform.localScale.x;
+            }
+
+            private set
+            {
+                var scale = transform.localScale;
+                scale.x = value;
+                transform.localScale = scale;
+            }
+        }
+
         void Awake()
         {
             closedLength = transform.localScale.x;
@@ -29,17 +44,48 @@ namespace Rotary
         private void OpenGate()
         {
             Debug.Log("opening gate: " + this.name);
-            var scale = transform.localScale;
-            scale.x = 0;
-            transform.localScale = scale;
+            StopAllCoroutines();
+            StartCoroutine(TweenGateMovementCoroutine(0));
         }
 
         private void CloseGate()
         {
             Debug.Log("closing gate: " + this.name);
-            var scale = transform.localScale;
-            scale.x = closedLength;
-            transform.localScale = scale;
+            StopAllCoroutines();
+            StartCoroutine(TweenGateMovementCoroutine(closedLength));
+        }
+
+        IEnumerator TweenGateMovementCoroutine(float target)
+        {
+            Debug.Log(this.name + " [Begin TweenGateMovement Coroutine]");
+            bool opening = target < currentGateScale;
+
+            float movementPerSecond = opening ? -2 : 2; // if gate is opening, we reduce the gate size
+            float movementPerStep = movementPerSecond * Time.fixedDeltaTime;
+
+            // loop
+            if (opening)
+            {
+                while (target < currentGateScale)
+                {
+                    currentGateScale += movementPerStep;
+                    yield return new WaitForFixedUpdate();
+                }
+            }
+            else
+            {
+                while (target > currentGateScale)
+                {
+                    currentGateScale += movementPerStep;
+                    yield return new WaitForFixedUpdate();
+                } 
+            }
+
+            // done
+            currentGateScale = target;
+            Debug.Log(this.name + " [End TweenGateMovement Coroutine]");
+
+            yield break;
         }
     }
 }
