@@ -20,9 +20,9 @@ public class ProductionInitializer : MonoBehaviour
     {
         GameObject.Instantiate(worldPrefab, Vector3.zero, Quaternion.identity);
 
-        #if UNITY_ANDROID || UNITY_IOS
+        #if UNITY_ANDROID || UNITY_IOS || MOBILE_INPUT
         GameObject.Instantiate(uiControlPrefab, Vector3.zero, Quaternion.identity);
-        TouchControl.Instance().DisableUIButton("Interact");
+        //TouchControl.Instance().DisableUIButton("Interact");
         #endif
     }
 }

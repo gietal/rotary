@@ -16,6 +16,11 @@ public class TouchControl : MonoBehaviour
         instance = this;
     }
 
+    void Start()
+    {
+        DisableUIButton("Interact");
+    }
+
     public bool DisableUIButton(string button)
     {
         return SetButtonActive(button, false);
