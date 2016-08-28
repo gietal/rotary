@@ -46,5 +46,11 @@ namespace UnityStandardAssets.CrossPlatformInput
         {
 
         }
+
+        // GIETAL
+        public void ExitGame()
+        {
+            Application.Quit();
+        }
     }
 }
