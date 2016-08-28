@@ -22,6 +22,7 @@ public class ProductionInitializer : MonoBehaviour
 
         #if UNITY_ANDROID || UNITY_IOS
         GameObject.Instantiate(uiControlPrefab, Vector3.zero, Quaternion.identity);
+        TouchControl.Instance().DisableUIButton("Interact");
         #endif
     }
 }
