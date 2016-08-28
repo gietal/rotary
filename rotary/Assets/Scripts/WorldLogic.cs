@@ -35,6 +35,8 @@ namespace Rotary
 
         void ParentAllObjects()
         {
+            var uiLayer = LayerMask.NameToLayer("UI");
+
             // parent all objects in the scene to me
             var transforms = GameObject.FindObjectsOfType<Transform>();
             foreach (var t in transforms)
@@ -44,7 +46,7 @@ namespace Rotary
                     continue;
 
                 // skip cameras and player etc
-                if (t.tag == "MainCamera" || t.tag == "Player")
+                if (t.tag == "MainCamera" || t.tag == "Player" || t.gameObject.layer == uiLayer)
                     continue;
 
                 // parent all top level objects to the world hinge
