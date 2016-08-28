@@ -54,6 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldPrefab: {fileID: 116770, guid: 14a8081a09fdd68448c77c4f6f157d7a, type: 2}
+  uiControlPrefab: {fileID: 144110, guid: 021751ed7b0df8142a64348e2c640d0c, type: 2}
 --- !u!114 &11475944
 MonoBehaviour:
   m_ObjectHideFlags: 1
